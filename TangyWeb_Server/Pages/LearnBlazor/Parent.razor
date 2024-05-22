@@ -1,0 +1,15 @@
+﻿@page "/learnBlazor/parent"
+<h3>Parent Child Relation </h3>
+<_Child OnButtonClick="ShowMessage" Title="This is chiled Component">
+    <ChildContent>what this ?</ChildContent>
+    <DangerChiledContent>Danger Content from dfragment </DangerChiledContent>
+</_Child>
+<p>@textMessage</p>
+<_AnotherChild ></_AnotherChild>
+@code {
+    public string textMessage = "";
+    private void ShowMessage()
+    {
+        textMessage = "Tony button clicked";
+    }
+}

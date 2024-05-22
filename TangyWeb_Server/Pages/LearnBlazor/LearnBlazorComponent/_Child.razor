@@ -1,0 +1,25 @@
+﻿<div class="alert alert-info">@Title</div>
+<div>
+    @if (DangerChiledContent!=null)
+    {
+        <span>@DangerChiledContent</span>
+    }
+    else{
+    @if (ChildContent!=null)
+    {
+        <span>@ChildContent</span>
+    }
+    }<br />
+   <button @onclick="OnButtonClick">Button be Clicked</button>
+    <_GrandChiled MessageFromGrand="from Grand component(_childcomponent)"></_GrandChiled>
+</div>
+@code {
+    [Parameter]
+    public string Title{ get; set; }
+    [Parameter]
+    public RenderFragment ChildContent{ get; set; }
+    [Parameter]
+    public EventCallback OnButtonClick{ get; set; }
+    [Parameter]
+    public RenderFragment DangerChiledContent{ get; set; }
+}

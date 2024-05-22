@@ -1,0 +1,117 @@
+﻿@page "/learnBlazor/bindProb"
+
+
+
+<br />
+<h2 class="text-success">Individual Product</h2>
+<div class="row m-1">
+    <div class="col-6 border p-3">
+    <h3 class="text-primary">Product playground</h3><hr />
+    <div>
+        Price:<input type="number" @bind-value="@product.Price" @bind-value:event="oninput" />
+    </div>
+    <div>
+        IsActive:<input type="checkbox" @bind-value="product.IsActive" checked="@(product.IsActive?"checked":null)" />
+    </div>
+    
+<div>
+        Product Properties:
+
+<select @bind="@selectedProperty">
+    @foreach (var item in product.ProductProperties)
+    {
+        <option value="@item.Key">@item.Key</option>
+    }
+</select>
+</div>
+</div>
+    <div class="col-6 border p-3">
+
+    <h3 class="text-primary">Product Summary</h3><hr />
+    Name:@product.Name<br />
+    IsActive:@product.IsActive<br />
+    price:@product.Price<br />
+    @if (!string.IsNullOrWhiteSpace(selectedProperty))
+    {
+        <p>Value:@product.ProductProperties.FirstOrDefault(x => x.Key == selectedProperty).Value</p>
+    }
+</div>
+<div class="col-12 pt-3">
+        <h2 class="text-success">Products table</h2>
+        <table class="table table-striped">
+            <tbody>
+                @foreach (var item in Products)
+                {
+                    <tr>
+                        <td>
+                            <input type="text" @bind-value="item.Name" @bind-value:event="oninput" />
+                        </td>
+                        <td>
+                            <input type="text" @bind-value="item.Price" @bind-value:event="oninput" />
+                        </td>
+                        <td>
+                            <input type="checkbox" @bind-value="item.IsActive" checked="@(item.IsActive?"checked":null)"/>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br /><br />
+        <h2>Product Summary</h2>
+        @foreach (var prod in Products)
+        {
+            <p>@prod.Name [@prod.Price] is @(prod.IsActive?"Active":"InActive")</p>
+        }
+
+</div>
+</div>
+@code {
+    private string selectedProperty="";
+    Tangy_Models.LearnBlazorModels.Demo_Product product = new()
+        {
+            Id = 1,
+            Name = "Roze Candel",
+            IsActive = true,
+            Price = 36.25m,
+            ProductProperties = new List<Demo_ProductProp>()
+            {
+                new Demo_ProductProp{Id=1,Key="Color",Value="Black"},
+                new Demo_ProductProp{Id=2,Key="Flaver",Value="Rose Jasmen"},
+                new Demo_ProductProp{Id=3,Key="Size",Value="20os"},
+            }
+    };
+    List<Demo_Product> Products = new List<Demo_Product>();
+    protected override void OnInitialized()
+    {
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Midnight Blaze",
+                IsActive = false,
+                Price = 16.25m,
+
+                ProductProperties = new()
+                {
+                new Demo_ProductProp { Id = 1, Key = "Flavor", Value = "Rose"},
+                     new Demo_ProductProp { Id = 2, Key = "Size", Value = "20oz"},
+                    new Demo_ProductProp { Id = 3, Key = "Color", Value="Purple" }
+                }
+            });
+
+        Products.Add(new()
+            {
+                Id = 2,
+                Name = "Blossom Lily",
+                IsActive = true,
+                Price = 26.25m,
+
+                ProductProperties = new()
+            {
+                new Demo_ProductProp { Id = 1, Key = "Flavor", Value = "Lily" },
+                new Demo_ProductProp { Id = 2, Key = "Size", Value = "18oz" },
+                new Demo_ProductProp {Id = 3,Key = "Color",Value = "White"}
+            }
+            });
+    }
+
+}
