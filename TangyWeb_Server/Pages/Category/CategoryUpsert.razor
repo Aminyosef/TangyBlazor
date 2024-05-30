@@ -1,12 +1,20 @@
 ﻿@page "/category/create"
+@page "/category/edit/{id:int}"
 @inject ICategoryRepository _categoryRepository
-
 @inject NavigationManager _navigationManager
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3">@Title Category</h3>
     <div class="col-10">
-        <EditForm Model="Category" OnValidSubmit="UpsertCategory">
-            <DataAnnotationsValidator/>
+        @if (IsLoading)
+        {
+            <div class="text-center">
+                <img src="/images/loading.gif" />
+            </div>
+        }
+        else
+        {
+            <EditForm Model="Category" OnValidSubmit="UpsertCategory">
+                <DataAnnotationsValidator/>
             
             <div class="form-group">
                 <label>Name</label>
@@ -18,14 +26,49 @@
                 <NavLink href="category" class="btn btn-secondary">Back to Index</NavLink>
             </div>
         </EditForm>
+        }
     </div>
 </div>
 @code {
+
+    [Parameter]
+    public int Id {get; set;}
     private CategoryDTO Category{ get; set; }=new();
     private string Title{ get; set; }="Create";
     private void UpsertCategory()
-    {
-        _categoryRepository.Create(Category);
+    {if (Category.Id==0)
+        {
+            //creat
+            _categoryRepository.Create(Category);
+
+        }
+        else
+        {
+            _categoryRepository.Update(Category);
+        }
         _navigationManager.NavigateTo("category");
+
     }
+    private IEnumerable<CategoryDTO> categories { get; set; } = new List<CategoryDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id==0)
+        {
+            //creat
+            IsLoading = false;
+        }
+        else
+        {
+            //update
+            Title = "Edit";
+            await Task.Run(LoadCategory);
+        }
+    }
+    private bool IsLoading { get; set; } = true;
+    private void LoadCategory()
+    {
+        Category = _categoryRepository.Get(Id);
+        IsLoading = false;
+
+}
 }
