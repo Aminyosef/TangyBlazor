@@ -7,17 +7,21 @@ using Tangy_Business.Mapper;
 using Tangy_DataAccess;
 using Tangy_Business.Repository.IRepository;
 using Tangy_Business.Repository;
+using TangyWeb_Server.Service.IService;
+using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSyncfusionBlazor();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IFileUpload, FileUpload>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

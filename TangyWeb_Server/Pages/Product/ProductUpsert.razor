@@ -3,9 +3,11 @@
 @inject ICategoryRepository _categoryRepository
 @inject IProductRepository _productRepository
 @inject NavigationManager _navigationManager
+@inject IFileUpload _fileUpload
+@inject IJSRuntime _JSRuntime
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3">@Title Category</h3>
-    <div class="col-10">
+    <div class="col-md-10">
         @if (IsLoading)
         {
             <div class="text-center">
@@ -27,24 +29,41 @@
                     <ValidationMessage For="()=>Product.Color" />
                 </div>
                 <div class="form-group">
-                    <label>Discription</label>
+                    <label>Description</label>
+
                     <InputTextArea @bind-Value="Product.Description" class="form-control"></InputTextArea>
-                    <ValidationMessage For="()=>Product.Description" />
+                    <ValidationMessage For="()=>Product.Description"></ValidationMessage>
                 </div>
                 <div class="row pt-3">
-                    <div class="btn-group col-6">
+                    <div class="form-group col-6">
                         <div class="form-check">
                             <InputCheckbox @bind-Value="Product.ShopeFavorites" class="form-check-input"></InputCheckbox>
                             <label class="form-check-label">Is Shope Favorites</label>
                         </div>
                     </div>
-                    <div class="btn-group col-6">
+                    <div class="form-group col-6">
                         <div class="form-check">
                             <InputCheckbox @bind-Value="Product.CustomerFavorites" class="form-check-input"></InputCheckbox>
                             <label class="form-check-label">Is Customer Favorites</label>
                         </div>
                     </div>
+                    <div class="form-group col-6">
+                        <label class="form-label">Category</label>
+                            <InputSelect @bind-Value="Product.CategoryId" class="form-select">
+                                <option value="0" disabled="disabled" selected>--Select Category---</option>
+                                @foreach(var cat in categories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>Product.CategoryId"></ValidationMessage>
+
+                    </div>
+                    <div class="form-group pt-4 col-6">
+                        <InputFile OnChange="HandelImageUpload"></InputFile>
+                    </div>
                 </div>
+
             <div class="form-group py-2">
                 <button class="btn btn-primary">@Title</button>
                     <NavLink href="Product" class="btn btn-secondary">Back to Index</NavLink>
@@ -52,34 +71,47 @@
         </EditForm>
         }
     </div>
+<div class="col-md-2">
+    <img src="@Product.ImageUrl" class="w-100"/>
+</div>
 </div>
 @code {
 
     [Parameter]
     public int Id {get; set;}
-    private ProductDTO Product { get; set; } = new();
-    private IEnumerable<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+    private ProductDTO Product { get; set; } = new()
+    {
+            ImageUrl = "/images/product/default.png"
+    };
     private string Title{ get; set; }="Create";
+    private IEnumerable<CategoryDTO> categories { get; set; } = new List<CategoryDTO>();
+    public bool IsLoading { get; set; }
+    public string OldImageUrl{ get; set; }
     private async Task UpsertProduct()
     {if (Product.Id==0)
         {
             //creat
             await _productRepository.Create(Product);
+            await _JSRuntime.ToastrSuccess("Created Successfully");
 
         }
         else
         {
             await _productRepository.Update(Product);
+            if (OldImageUrl!=Product.ImageUrl)
+            {
+                _fileUpload.DeleteFile(OldImageUrl);
+                await _JSRuntime.ToastrSuccess("Updated Successfully");
+            }
         }
         _navigationManager.NavigateTo("product");
 
     }
-    private IEnumerable<CategoryDTO> categories { get; set; } = new List<CategoryDTO>();
-    public bool IsLoading { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstrender)
     {if (firstrender)
         {
-            LoadProducts();
+            await LoadProducts();
 
         }
     }
@@ -87,14 +119,43 @@
     {
         IsLoading = true;
         StateHasChanged();
-        Categories = await _categoryRepository.GetAll();
+        categories = await _categoryRepository.GetAll();
         if (Id!=0)
         {
             Title = "Update";
             Product = await _productRepository.Get(Id);
+            OldImageUrl = Product.ImageUrl;
         }
         IsLoading = false;
         StateHasChanged();
 
-}
+    }
+    private async Task HandelImageUpload(InputFileChangeEventArgs e)
+    {
+        IsLoading = true;
+        try
+        {if (e.GetMultipleFiles().Count>0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    FileInfo fileInfo = new FileInfo(file.Name);
+                    if (fileInfo.Extension.ToLower()==".jpg"||fileInfo.Extension.ToLower()==".jpeg"
+                    ||fileInfo.Extension.ToLower()==".png")
+                    {
+                        Product.ImageUrl = await _fileUpload.UploadFile(file);
+                    }
+                    else
+                    {
+                        await _JSRuntime.ToastrError("please select .jpg/.jpeg/.png file only");
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            
+            await _JSRuntime.ToastrError(ex.Message);
+        }
+    }
 }
