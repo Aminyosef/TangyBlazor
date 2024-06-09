@@ -1,7 +1,7 @@
 ﻿@page "/product/create"
 @page "/product/edit/{id:int}"
 @inject ICategoryRepository _categoryRepository
-@inject IProductRepository _productRepository
+@inject IProductPriceRepository _productRepository
 @inject NavigationManager _navigationManager
 @inject IFileUpload _fileUpload
 @inject IJSRuntime _JSRuntime
@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label>Description</label>
 
-                    <InputTextArea @bind-Value="Product.Description" class="form-control"></InputTextArea>
+                    <SfRichTextEditor @bind-Value="Product.Description" ></SfRichTextEditor>
                     <ValidationMessage For="()=>Product.Description"></ValidationMessage>
                 </div>
                 <div class="row pt-3">

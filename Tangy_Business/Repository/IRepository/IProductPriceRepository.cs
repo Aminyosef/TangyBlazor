@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Tangy_Models;
@@ -9,10 +10,10 @@ namespace Tangy_Business.Repository.IRepository
 {
     public interface IProductPriceRepository
     {
-        public Task<ProductDTO> Create(ProductDTO objDTO);
-        public Task<ProductDTO> Update(ProductDTO objDTO);
+        public Task<ProductPriceDTO> Create(ProductPriceDTO objDTO);
+        public Task<ProductPriceDTO> Update(ProductPriceDTO objDTO);
         public Task<int> Delete(int id);
-        public Task<ProductDTO> Get(int id);
-        public Task<IEnumerable<ProductDTO>> GetAll();
+        public Task<ProductPriceDTO> Get(int id);
+        public Task<IEnumerable<ProductPriceDTO>> GetAll();
     }
 }
