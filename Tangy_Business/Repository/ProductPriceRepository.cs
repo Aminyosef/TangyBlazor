@@ -16,64 +16,71 @@ namespace Tangy_Business.Repository
     {
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
+
         public ProductPriceRepository(ApplicationDbContext db, IMapper mapper)
         {
             _db = db;
             _mapper = mapper;
         }
-        public async Task<ProductDTO> Create(ProductDTO objDTO)
+
+        public async Task<ProductPriceDTO> Create(ProductPriceDTO objDTO)
         {
-            var obj = _mapper.Map<ProductDTO, Product>(objDTO);
-            var addedObj = _db.Products.Add(obj);
+            var obj = _mapper.Map<ProductPriceDTO, ProductPrice>(objDTO);
+
+            var addedObj = _db.ProductPrices.Add(obj);
             await _db.SaveChangesAsync();
 
-            return _mapper.Map<Product, ProductDTO>(addedObj.Entity);
+            return _mapper.Map<ProductPrice, ProductPriceDTO>(addedObj.Entity);
         }
 
         public async Task<int> Delete(int id)
         {
-            var obj = await _db.Products.FirstOrDefaultAsync(c => c.Id == id);
+            var obj = await _db.ProductPrices.FirstOrDefaultAsync(u => u.Id == id);
             if (obj != null)
             {
-                _db.Products.Remove(obj);
+                _db.ProductPrices.Remove(obj);
                 return await _db.SaveChangesAsync();
             }
             return 0;
         }
 
-        public async Task<ProductDTO> Get(int id)
+        public async Task<ProductPriceDTO> Get(int id)
         {
-            var obj = await _db.Products.Include(x=>x.Category).FirstOrDefaultAsync(c => c.Id == id);
+            var obj = await _db.ProductPrices.FirstOrDefaultAsync(u => u.Id == id);
             if (obj != null)
             {
-                return _mapper.Map<Product, ProductDTO>(obj);
+                return _mapper.Map<ProductPrice, ProductPriceDTO>(obj);
             }
-            return new ProductDTO();
+            return new ProductPriceDTO();
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAll()
+        public async Task<IEnumerable<ProductPriceDTO>> GetAll(int? id = null)
         {
-            return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(_db.Products.Include(x=>x.Category));
+            if (id != null && id > 0)
+            {
+                return _mapper.Map<IEnumerable<ProductPrice>, IEnumerable<ProductPriceDTO>>
+                    (_db.ProductPrices.Where(u => u.ProductId == id));
+            }
+            else
+            {
+                return _mapper.Map<IEnumerable<ProductPrice>, IEnumerable<ProductPriceDTO>>(_db.ProductPrices);
+            }
         }
 
-        public async Task<ProductDTO> Update(ProductDTO objDTO)
+        public async Task<ProductPriceDTO> Update(ProductPriceDTO objDTO)
         {
-            var objFromDb = await _db.Products.FirstOrDefaultAsync(c => c.Id == objDTO.Id);
+            var objFromDb = await _db.ProductPrices.FirstOrDefaultAsync(u => u.Id == objDTO.Id);
             if (objFromDb != null)
             {
-                objFromDb.Name = objDTO.Name;
-                objFromDb.Description = objDTO.Description;
-                objFromDb.ImageUrl = objDTO.ImageUrl;
-                objFromDb.CategoryId = objDTO.CategoryId;
-                objFromDb.Color = objDTO.Color;
-                objFromDb.ShopeFavorites = objDTO.ShopeFavorites;
-                objFromDb.CustomerFavorites = objDTO.CustomerFavorites;
-                objFromDb.Name = objDTO.Name;
-                _db.Products.Update(objFromDb);
+                objFromDb.Price = objDTO.Price;
+                objFromDb.Size = objDTO.Size;
+                objFromDb.ProductId = objDTO.ProductId;
+                _db.ProductPrices.Update(objFromDb);
                 await _db.SaveChangesAsync();
-                return _mapper.Map<Product, ProductDTO>(objFromDb);
+                return _mapper.Map<ProductPrice, ProductPriceDTO>(objFromDb);
             }
             return objDTO;
+
         }
     }
 }

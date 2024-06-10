@@ -1,5 +1,5 @@
 ﻿@page "/product"
-@inject IProductPriceRepository  _productRepository
+@inject IProductRepository  _productRepository
 @inject IJSRuntime _jSruntim
 @inject IFileUpload _fileUpload
 
@@ -34,6 +34,7 @@
                             <td>@item.Category.Name</td>
                             <td>
                                 <NavLink href="@($"product/edit/{item.Id}")" class="btn btn-primary">Edit</NavLink>
+                                <NavLink href="@($"product/price/{item.Id}")" class="btn btn-success">Price</NavLink>
                                 <button class="btn btn-danger" @onclick="()=>HandelDelete(item.Id)">Delete</button>
                             </td>
 

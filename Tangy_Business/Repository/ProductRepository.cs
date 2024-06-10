@@ -12,7 +12,7 @@ using Tangy_Models;
 
 namespace Tangy_Business.Repository
 {
-    public class ProductRepository : IProductPriceRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
