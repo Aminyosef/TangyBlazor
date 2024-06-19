@@ -31,7 +31,7 @@ namespace Tangy_API.Controllers
 
                 });
             }
-            var product = _productRepository.Get(ProductId.Value);
+            var product =await _productRepository.Get(ProductId.Value);
             if (product == null)
             {
                 return BadRequest(new ErrorModelDTO()
