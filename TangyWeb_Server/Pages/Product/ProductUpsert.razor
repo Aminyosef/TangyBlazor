@@ -5,6 +5,8 @@
 @inject NavigationManager _navigationManager
 @inject IFileUpload _fileUpload
 @inject IJSRuntime _JSRuntime
+@attribute [Authorize]
+
 <div class="row my-2">
     <h3 class="card-title text-primary mb-3 ml-3">@Title Category</h3>
     <div class="col-md-10">

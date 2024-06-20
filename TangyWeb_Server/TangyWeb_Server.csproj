@@ -8,11 +8,19 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.30">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.30" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.29">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="25.2.7" />
     <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="25.2.7" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="25.2.7" />
@@ -31,6 +39,10 @@
     <Content Update="Pages\Product\ProductUpsert.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
   </ItemGroup>
 
 </Project>

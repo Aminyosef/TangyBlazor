@@ -1,6 +1,8 @@
 ﻿@page "/category"
+@using Tangy_Common
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _jSruntim
+@attribute [Authorize(Roles =SD.Role_Admin)]
 
 <DeleteConfirmation IsParentComponentProcessing="IsLoading" ConfirmationChanged="ConfirmDelete_Click"></DeleteConfirmation>
 <div class="row mt-4">
