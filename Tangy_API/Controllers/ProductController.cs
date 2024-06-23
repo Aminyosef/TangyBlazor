@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tangy_Business.Repository.IRepository;
+using Tangy_Common;
 using Tangy_Models;
 
 namespace Tangy_API.Controllers
@@ -15,6 +17,7 @@ namespace Tangy_API.Controllers
             _productRepository = productRepository;
         }
         [HttpGet]
+       
         public async Task<ActionResult> GetAll()
         {
             return Ok(await _productRepository.GetAll());

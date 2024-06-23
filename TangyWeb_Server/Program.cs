@@ -11,6 +11,7 @@ using TangyWeb_Server.Service.IService;
 using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Identity;
 using TangyWeb_Server.Service;
+using Stripe;
 
 
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzMxNDU0NkAzMjM1MmUzMDJlMzBuc1VzU1ZRc25TWmdsRUhtek5hdXFieWxBZVRwa2N3NTJSekJtZWp2Uk84PQ==;MzMxNDU0N0AzMjM1MmUzMDJlMzBDQ2Z0aWI2M01Cc3lkRzUrN3dFVmt2M3FzZWZDZlJaZXRUanlGUlErYXE0PQ==");
@@ -28,11 +29,14 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProvide
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 builder.Services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IFileUpload, FileUpload>();
 var app = builder.Build();
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["ApiKey"];
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

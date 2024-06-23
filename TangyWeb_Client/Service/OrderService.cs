@@ -18,20 +18,20 @@ namespace TangyWeb_Client.Service
             BaseServerUrl = _configuration.GetSection("BaseServerUrl").Value;
         }
 
-        //public async Task<OrderDTO> Create(StripePaymentDTO paymentDTO)
-        //{
-        //    var content = JsonConvert.SerializeObject(paymentDTO);
-        //    var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-        //    var response = await _httpClient.PostAsync("api/order/create", bodyContent);
-        //    string responseResult = response.Content.ReadAsStringAsync().Result;
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var result = JsonConvert.DeserializeObject<OrderDTO>(responseResult);
-        //        return result;
-        //    }
-        //    return new OrderDTO();
+        public async Task<OrderDTO> Create(StripePaymentDTO paymentDTO)
+        {
+            var content = JsonConvert.SerializeObject(paymentDTO);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("api/order/create", bodyContent);
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<OrderDTO>(responseResult);
+                return result;
+            }
+            return new OrderDTO();
 
-        //}
+        }
 
         public async Task<OrderDTO> Get(int orderHeaderId)
         {
