@@ -5,7 +5,6 @@
 @inject IProductService _productService
 @inject IOrderService _orderService
 @inject IPaymentService _paymentService
-
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
@@ -142,7 +141,7 @@ else
                     ProductName = product.Name,
                     Product = product
                 };
-            Order.OrderDetails.Add(orderDetailDTO);
+          Order.OrderDetails.Add(orderDetailDTO);
             Order.OrderHeader.OrderTotal += (item.Count * productPrice.Price);
         }
 

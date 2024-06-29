@@ -40,8 +40,8 @@ namespace TangyWeb_Server.Service
 
                 IdentityUser user = new()
                 {
-                    UserName = "bhrugen@dotnetmastery.com",
-                    Email = "bhrugen@dotnetmastery.com",
+                    UserName = "Amin",
+                    Email = "amin@yahoo.com",
                     EmailConfirmed = true
                 };
 

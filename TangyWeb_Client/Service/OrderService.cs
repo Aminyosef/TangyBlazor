@@ -63,11 +63,13 @@ namespace TangyWeb_Client.Service
             return new List<OrderDTO>();
         }
 
+      
+
         public async Task<OrderHeaderDTO> MarkPaymentSuccessful(OrderHeaderDTO orderHeader)
         {
             var content = JsonConvert.SerializeObject(orderHeader);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/order/paymentsuccessful", bodyContent);
+            var response = await _httpClient.PostAsync("api/order/paymentSuccessful", bodyContent);
             string responseResult = response.Content.ReadAsStringAsync().Result;
             if (response.IsSuccessStatusCode)
             {
